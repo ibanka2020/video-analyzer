@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>视频智能分析助手 - 设置</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f9fafb;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+    }
+    .header h1 { font-size: 28px; margin-bottom: 5px; }
+    .header p { opacity: 0.9; font-size: 14px; }
+    .tabs {
+      display: flex;
+      background: #f3f4f6;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    .tab {
+      flex: 1;
+      padding: 16px 24px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: #6b7280;
+      transition: all 0.2s;
+      border-bottom: 3px solid transparent;
+    }
+    .tab:hover { background: #e5e7eb; color: #374151; }
+    .tab.active {
+      background: white;
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* 新UI布局 */
+    .settings-layout {
+      display: flex;
+      min-height: 400px;
+    }
+    .settings-sidebar {
+      width: 250px;
+      background: #f9fafb;
+      border-right: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-list {
+      flex-grow: 1;
+      list-style: none;
+      overflow-y: auto;
+    }
+    .sidebar-list-item {
+      padding: 14px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #e5e7eb;
+      color: #374151;
+      word-break: break-all;
+    }
+    .sidebar-list-item:hover {
+      background: #f3f4f6;
+    }
+    .sidebar-list-item.selected {
+      background: #e9eafc;
+      color: #667eea;
+      font-weight: 600;
+    }
+    .sidebar-footer {
+      padding: 15px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .btn-add {
+      width: 100%;
+      padding: 10px 20px;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-add:hover { background: #059669; }
+
+    .settings-form {
+      flex-grow: 1;
+      padding: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .form-group textarea {
+      /* 修复：增加最小高度以移除滚动条 */
+      min-height: 300px; 
+      resize: vertical;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+      margin-top: 30px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+    }
+    .btn-delete:hover { background: #dc2626; }
+    .btn-save {
+      background: #667eea;
+      color: white;
+    }
+    .btn-save:hover { background: #5a67d8; }
+    .form-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #9ca3af;
+      font-size: 16px;
+    }
+    .hint {
+      background: #eff6ff;
+      border-left: 3px solid #3b82f6;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #1e40af;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    .hint code {
+      background: #dbeafe;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #10b981;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: none;
+      animation: slideIn 0.3s ease;
+      z-index: 1000;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="success-message" id="successMessage">✓ 保存成功！</div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>⚙️ 高级设置</h1>
+      <p>自定义AI平台、提示词和支持的网站</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="ai">🤖 AI平台管理</div>
+      <div class="tab" data-tab="prompt">📝 提示词管理</div>
+      <div class="tab" data-tab="site">🌐 分析网站管理</div>
+    </div>
+
+    <div class="tab-content active" id="tab-ai">
+      <div class="settings-layout">
+        <div class="settings-sidebar">
+          <ul class="sidebar-list" id="ai-list-sidebar">
+            </ul>
+          <div class="sidebar-footer">
+            <button class="btn-add" id="addAIBtn">➕ 添加新AI</button>
+          </div>
+        </div>
+        <div class="settings-form" id="ai-form-container">
+          </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-prompt">
+      <div class="settings-layout">
+        <div class="settings-sidebar">
+          <ul class="sidebar-list" id="prompt-list-sidebar">
+            </ul>
+          <div class="sidebar-footer">
+            <button class="btn-add" id="addPromptBtn">➕ 添加新提示词</button>
+          </div>
+        </div>
+        <div class="settings-form" id="prompt-form-container">
+          </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-site">
+      <div class="settings-layout">
+        <div class="settings-sidebar">
+          <ul class="sidebar-list" id="site-list-sidebar">
+            </ul>
+          <div class="sidebar-footer">
+            <button class="btn-add" id="addSiteBtn">➕ 添加新网站</button>
+          </div>
+        </div>
+        <div class="settings-form" id="site-form-container">
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
